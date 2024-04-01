@@ -33,4 +33,5 @@ dependencyResolutionManagement {
 rootProject.name = "Picsum"
 // 빌드에 포함할 서브 프로젝트
 include(":app")
- 
+include(":core:ui")
+include(":core:model")
