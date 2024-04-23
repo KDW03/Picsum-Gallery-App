@@ -74,7 +74,7 @@ val DarkDefaultColorScheme = darkColorScheme(
 )
 
 @Composable
-fun DoTheme(
+fun PsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     disableDynamicTheming: Boolean = true,
     content: @Composable () -> Unit,
@@ -102,7 +102,7 @@ fun DoTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = DoTypography,
+            typography = PsTypography,
             content = content,
         )
     }

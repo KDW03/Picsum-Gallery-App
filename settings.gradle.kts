@@ -1,4 +1,3 @@
-
 // 플러그인 설정 검색 관리
 pluginManagement {
     // 현재 Gradle 빌드에 "build-logic" 빌드 로직을 포함
@@ -35,3 +34,12 @@ rootProject.name = "Picsum"
 include(":app")
 include(":core:ui")
 include(":core:model")
+include(":core:data")
+include(":core:datastore")
+include(":core:database")
+include(":core:network")
+include(":core:common")
+
+include(":feature:gallery")
+include(":feature:settings")
+include(":feature:search")

@@ -1,4 +1,4 @@
-import com.example.picsum.DoBuildType
+import com.example.picsum.PsBuildType
 
 plugins {
     id("picsum.android.application")
@@ -22,12 +22,12 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = DoBuildType.DEBUG.applicationIdSuffix
+            applicationIdSuffix = PsBuildType.DEBUG.applicationIdSuffix
             manifestPlaceholders["appName"] = "picsum (Debug)"
         }
         val release by getting {
             isMinifyEnabled = true
-            applicationIdSuffix = DoBuildType.RELEASE.applicationIdSuffix
+            applicationIdSuffix = PsBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("debug")
             manifestPlaceholders["appName"] = "picsum"
@@ -38,7 +38,7 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             proguardFiles("benchmark-rules.pro")
             isMinifyEnabled = true
-            applicationIdSuffix = DoBuildType.BENCHMARK.applicationIdSuffix
+            applicationIdSuffix = PsBuildType.BENCHMARK.applicationIdSuffix
             manifestPlaceholders["appName"] = "picsum (Benchmark)"
         }
     }
@@ -52,6 +52,17 @@ android {
 
 dependencies {
 
+    implementation(project(":feature:gallery"))
+    implementation(project(":feature:search"))
+    implementation(project(":feature:settings"))
+
+    implementation(project(":core:ui"))
+    implementation(project(":core:data"))
+    implementation(project(":core:model"))
+    implementation(project(":core:common"))
+
+    androidTestImplementation(project(":core:network"))
+    testImplementation(project(":core:network"))
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.accompanist.testharness)
 
