@@ -23,7 +23,7 @@ import com.example.picsum.core.ui.R
 
 // 이미지를 로드하고 표시하는 컴포넌트
 @Composable
-fun DoAsyncImage(
+fun PsAsyncImage(
     imageUrl: String,
     contentDescription: String?,
     modifier: Modifier = Modifier,

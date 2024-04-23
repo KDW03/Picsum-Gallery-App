@@ -3,6 +3,7 @@ package com.example.picsum.core.network.di
 import android.content.Context
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import com.example.picsum.core.network.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

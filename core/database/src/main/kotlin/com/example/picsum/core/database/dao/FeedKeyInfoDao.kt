@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import com.example.picsum.core.database.entity.FeedKeyInfoEntity
 
 @Dao
@@ -15,7 +16,7 @@ interface FeedKeyInfoDao {
     @Query("SELECT * FROM feeds_key_info ORDER BY lastUpdated DESC LIMIT 1")
     suspend fun getLatestKey(): FeedKeyInfoEntity?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun replace(pageKeys: List<FeedKeyInfoEntity>)
 
     @Query("DELETE FROM feeds_key_info")

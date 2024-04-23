@@ -12,7 +12,7 @@ import com.example.picsum.core.ui.icon.Icon.*
 
 
 // icon 관리
-object DoIcons {
+object PsIcons {
     val Settings = ImageVectorIcon(Icons.Outlined.Settings)
 
     val Search = ImageVectorIcon(Icons.Outlined.Search)
@@ -28,5 +28,5 @@ object DoIcons {
 // DrawableResourceIcon : 리소스 ID를 통해 접근하는 drawable 아이콘
 sealed interface Icon {
     data class ImageVectorIcon(val imageVector : ImageVector) : Icon
-    data class DrawableResourceIcon(@DrawableRes val resourced: Int) : Icon
+    data class DrawableResourceIcon(@DrawableRes val resourceId: Int) : Icon
 }

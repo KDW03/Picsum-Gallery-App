@@ -46,7 +46,7 @@ fun FeedItem(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            DoAsyncImage(
+            PsAsyncImage(
                 imageUrl = PicsumUrl.getImage(feedResource.id),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize().align(Alignment.Center)

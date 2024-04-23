@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.example.picsum.core.ui.theme.LocalBackgroundTheme
 
 @Composable
-fun DoBackground(
+fun PsBackground(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
