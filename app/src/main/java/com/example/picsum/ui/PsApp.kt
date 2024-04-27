@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.picsum.R
 import com.example.picsum.component.PsTopAppBar
@@ -47,8 +49,8 @@ import com.example.picsum.core.data.util.NetworkMonitor
 import com.example.picsum.core.ui.component.PsBackground
 import com.example.picsum.core.ui.icon.PsIcons
 import com.example.picsum.navigation.PsNavHost
-import com.example.picsum.feature.settings.R as settingsR
 import com.example.picsum.feature.search.R as searchR
+import com.example.picsum.feature.settings.R as settingsR
 
 
 @OptIn(
@@ -96,7 +98,15 @@ fun PsApp(
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 contentWindowInsets = WindowInsets(0, 0, 0, 0),
-                snackbarHost = { SnackbarHost(snackbarHostState) },
+                snackbarHost = {
+                    SnackbarHost(snackbarHostState) { data ->
+                        Box(modifier = Modifier.padding(bottom = 16.dp)) {
+                            Snackbar(
+                                snackbarData = data,
+                            )
+                        }
+                    }
+                },
             ) { padding ->
                 Row(
                     Modifier

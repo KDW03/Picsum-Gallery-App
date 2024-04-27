@@ -30,25 +30,27 @@ class SearchViewModel @Inject constructor(
     val searchResultUiState: StateFlow<SearchResultUiState> =
         searchQuery.flatMapLatest { query ->
             when {
-                query.length < SEARCH_QUERY_MIN_LENGTH -> flowOf(SearchResultUiState.LowQuery)
-                else -> feedsRepository.getQueryFeeds(query)
-                    .asResult()
-                    .map { result ->
-                        when (result) {
-                            is Result.Success ->
-                                if (result.data.isEmpty()) SearchResultUiState.EmptyResult
-                                else SearchResultUiState.Success(result.data)
-                            is Result.Loading -> SearchResultUiState.Loading
-                            is Result.Error -> SearchResultUiState.LoadFailed
+                query.length < SEARCH_QUERY_MIN_LENGTH -> flowOf(SearchResultUiState.NotReady)
+                else -> {
+                    feedsRepository.getQueryFeeds(query)
+                        .asResult()
+                        .map { result ->
+                            when (result) {
+                                is Result.Success ->
+                                    if (result.data.isEmpty()) SearchResultUiState.EmptyResult
+                                    else SearchResultUiState.Success(result.data)
+
+                                is Result.Loading -> SearchResultUiState.NotReady
+                                is Result.Error -> SearchResultUiState.LoadFailed
+                            }
                         }
-                    }
+                }
             }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = SearchResultUiState.Loading
+            initialValue = SearchResultUiState.NotReady
         )
-
 
 
     val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =
