@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.picsum.feature.settings"
+    namespace = "com.example.picsum.feature.search"
 }
 
 dependencies {

@@ -46,7 +46,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -61,7 +60,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.picsum.core.model.FeedResource
 import com.example.picsum.core.ui.component.FeedItem
 import com.example.picsum.core.ui.icon.PsIcons
-import com.example.picsum.feature.settings.R
+import com.example.picsum.feature.search.R
 import com.example.picsum.core.ui.R as uiR
 
 @Composable
