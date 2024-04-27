@@ -1,5 +1,6 @@
 package com.example.picsum.core.data.repository
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -50,9 +51,7 @@ class FeedsResourceRepositoryImpl @Inject constructor(
     override suspend fun getQueryFeeds(query: String): Flow<List<FeedResource>> {
         val nextPage = psDatabase.getFeedKeyInfoDao.getLatestKey()?.nextPage
 
-        if (nextPage != null) {
-            loadAllDataForQuery(nextPage)
-        }
+        if (nextPage != null) loadAllDataForQuery(nextPage)
 
         return try {
             psDatabase.getFeedResourceDao.getQueryFeeds(query)
@@ -73,25 +72,30 @@ class FeedsResourceRepositoryImpl @Inject constructor(
         withContext(ioDispatcher) {
             while (currentPage <= 100 && shouldContinue) {
                 val task = async {
-                    val response = retrofitPsNetwork.getFeeds(page = currentPage, limit = PAGE_SIZE)
-                    val entities = response.feedList
+                    try {
+                        val response = retrofitPsNetwork.getFeeds(page = currentPage, limit = PAGE_SIZE)
+                        val entities = response.feedList
 
-                    if (entities.isNotEmpty()) {
-                        psDatabase.withTransaction {
-                            psDatabase.getFeedResourceDao.upsertAll(entities.map { it.asEntity() })
-                            val keys = entities.map { feed ->
-                                FeedKeyInfoEntity(
-                                    id = feed.id.toInt(),
-                                    prevPage = response.prevPage,
-                                    nextPage = response.nextPage,
-                                    lastUpdated = System.currentTimeMillis()
-                                )
+                        if (entities.isNotEmpty()) {
+                            psDatabase.withTransaction {
+                                psDatabase.getFeedResourceDao.upsertAll(entities.map { it.asEntity() })
+                                val keys = entities.map { feed ->
+                                    FeedKeyInfoEntity(
+                                        id = feed.id.toInt(),
+                                        prevPage = response.prevPage,
+                                        nextPage = response.nextPage,
+                                        lastUpdated = System.currentTimeMillis()
+                                    )
+                                }
+                                psDatabase.getFeedKeyInfoDao.replace(keys)
                             }
-                            psDatabase.getFeedKeyInfoDao.replace(keys)
+                            response.nextPage != null
+                        } else {
+                            false
                         }
-                        response.nextPage != null
-                    } else {
-                        false
+                    } catch (e: Exception) {
+                        Log.e("LoadData", "Error : ${e.message}")
+                        false // 오류 발생 시 계속 진행하지 않음
                     }
                 }
                 tasks.add(task)
