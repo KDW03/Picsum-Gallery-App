@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.example.picsum.feature.settings"
 }
+
+dependencies {
+    implementation(libs.androidx.paging.compose)
+}
