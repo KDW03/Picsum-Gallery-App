@@ -96,7 +96,7 @@ internal fun SearchScreen(
     onFeedClick: (Int) -> Unit = {},
     recentSearchesUiState: RecentSearchQueriesUiState = RecentSearchQueriesUiState.Loading,
     searchQuery: String = "",
-    searchResultUiState: SearchResultUiState = SearchResultUiState.Loading,
+    searchResultUiState: SearchResultUiState = SearchResultUiState.NotReady,
 ) {
     Column(modifier = modifier) {
         SearchToolbar(
@@ -106,11 +106,13 @@ internal fun SearchScreen(
             searchQuery = searchQuery,
         )
         when (searchResultUiState) {
-            is SearchResultUiState.Loading, SearchResultUiState.LoadFailed -> Unit
-            is SearchResultUiState.LowQuery -> {
+            is SearchResultUiState.LoadFailed -> Unit
+            is SearchResultUiState.NotReady -> {
+                // loading
                 if (searchQuery.length >= SEARCH_QUERY_MIN_LENGTH) {
                     LoadingContent()
                 } else {
+                    // lowquery
                     ShowRecentSearches(
                         recentSearchesUiState = recentSearchesUiState,
                         onClearRecentSearches = onClearRecentSearches,
@@ -119,6 +121,7 @@ internal fun SearchScreen(
                     )
                 }
             }
+
             is SearchResultUiState.EmptyResult -> {
                 EmptySearchResultBody(searchQuery = searchQuery)
                 ShowRecentSearches(
@@ -128,6 +131,7 @@ internal fun SearchScreen(
                     onSearchTriggered = onSearchTriggered
                 )
             }
+
             is SearchResultUiState.Success -> {
                 SearchResultBody(
                     feeds = searchResultUiState.feeds,
