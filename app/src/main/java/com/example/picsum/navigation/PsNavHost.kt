@@ -2,6 +2,7 @@ package com.example.picsum.navigation
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.example.picsum.feature.gallery.navigation.detailFeedScreen
@@ -17,7 +18,7 @@ fun PsNavHost(
     appState: PsAppState,
     modifier: Modifier = Modifier,
     startDestination: String = galleryNavigationRoute,
-    listState: LazyGridState,
+    isScroll: MutableState<Boolean>,
 ) {
 
     val navController = appState.navController
@@ -29,7 +30,7 @@ fun PsNavHost(
     ) {
         galleryScreen(
             onFeedClick = navController::navigateToDetailFeed,
-            listState = listState
+            isScroll = isScroll
         ) {
             detailFeedScreen()
         }

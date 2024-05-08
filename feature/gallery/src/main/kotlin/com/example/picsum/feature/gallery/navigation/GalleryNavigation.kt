@@ -1,6 +1,7 @@
 package com.example.picsum.feature.gallery.navigation
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,16 +14,16 @@ fun NavController.navigateToGallery(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.galleryScreen(
-    listState: LazyGridState,
     onFeedClick: (Int) -> Unit,
+    isScroll : MutableState<Boolean>,
     nestedGraphs: () -> Unit,
 ) {
     composable(
         route = galleryNavigationRoute,
     ) {
         GalleryRoute(
-            listState = listState,
-            onFeedClick = onFeedClick
+            onFeedClick = onFeedClick,
+            isScroll = isScroll
         )
     }
     nestedGraphs()
