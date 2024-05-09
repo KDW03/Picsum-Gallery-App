@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
@@ -24,17 +28,17 @@ internal fun GalleryRoute(
     modifier: Modifier = Modifier,
     viewModel: GalleryViewModel = hiltViewModel(),
     onFeedClick: (Int) -> Unit,
-    listState: LazyGridState
+    isScroll: MutableState<Boolean>
 ) {
     val pagingFeeds = viewModel.feedsFlow.collectAsLazyPagingItems()
     val orientation = LocalConfiguration.current.orientation
 
     GalleryScreen(
         modifier = modifier,
-        listState = listState,
         pagingFeeds = pagingFeeds,
         onFeedClick = onFeedClick,
-        orientation = orientation
+        orientation = orientation,
+        isScroll = isScroll
     )
 }
 
@@ -44,16 +48,25 @@ internal fun GalleryScreen(
     pagingFeeds: LazyPagingItems<FeedResource>,
     onFeedClick: (Int) -> Unit,
     orientation: Int,
-    listState: LazyGridState
+    isScroll: MutableState<Boolean>
 ) {
-    Box(modifier.fillMaxSize().padding(PaddingValues().calculateTopPadding())) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .padding(PaddingValues().calculateTopPadding())
+    ) {
         val screenWidthDp = LocalConfiguration.current.orientation
         val columns = calculateColumns(screenWidthDp, orientation)
+        val listState = rememberLazyGridState()
+
+        LaunchedEffect(listState.isScrollInProgress) {
+            isScroll.value = listState.isScrollInProgress
+        }
 
         LazyVerticalGrid(
             state = listState,
             columns = GridCells.Fixed(columns),
-            contentPadding = PaddingValues(top = 64.dp ,start = 16.dp , end = 16.dp , bottom = 16.dp),
+            contentPadding = PaddingValues(top = 64.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
             modifier = Modifier.testTag("gallery:feed")
         ) {
             items(
@@ -71,7 +84,6 @@ internal fun GalleryScreen(
         }
     }
 }
-
 
 
 private fun calculateColumns(screenWidth: Int, orientation: Int): Int {

@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -68,15 +69,10 @@ fun PsApp(
         Box(Modifier.fillMaxSize()) {
             val snackbarHostState = remember { SnackbarHostState() }
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-            val listState = rememberLazyGridState()
+            val isScroll = remember { mutableStateOf(false) }
 
-            val isScrolling by remember {
-                derivedStateOf {
-                    listState.isScrollInProgress
-                }
-            }
             val alpha by animateFloatAsState(
-                targetValue = if (isScrolling) 0.6f else 1f,
+                targetValue = if (isScroll.value) 0.6f else 1f,
                 label = "alpha"
             )
             val notConnectedMessage = stringResource(R.string.not_connected)
@@ -123,14 +119,14 @@ fun PsApp(
                         Modifier.fillMaxSize()
                     ) {
                         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-                        PsNavHost(appState = appState, listState = listState)
+                        PsNavHost(appState = appState, isScroll = isScroll)
                     }
                 }
             }
 
             if (destination != null) {
                 AnimatedVisibility(
-                    visible = !isScrolling,
+                    visible = !isScroll.value,
                     enter = fadeIn(tween(150)),
                     exit = fadeOut(tween(150))
                 ) {
